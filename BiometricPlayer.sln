@@ -1,7 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BiometricPlayer", "BiometricPlayer.csproj", "{90540DBF-0129-4C22-B60A-DFF25CCCDB3D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BiometricPlayer", "BiometricPlayer\BiometricPlayer.csproj", "{90540DBF-0129-4C22-B60A-DFF25CCCDB3D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{065EED04-BB4C-49EE-9BD0-D755683D0EC7}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
