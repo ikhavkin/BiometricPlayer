@@ -10,6 +10,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{065EED
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BiometricPlayer.Core", "BiometricPlayer.Core\BiometricPlayer.Core.csproj", "{3226FA8A-DED0-490E-94D5-43140CA658AB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BiometricPlayer.Tests", "BiometricPlayer.Tests\BiometricPlayer.Tests.csproj", "{9C5E08B9-6516-418C-8F7B-AEEBE1DAE68F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,6 +24,14 @@ Global
 		{90540DBF-0129-4C22-B60A-DFF25CCCDB3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{90540DBF-0129-4C22-B60A-DFF25CCCDB3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{90540DBF-0129-4C22-B60A-DFF25CCCDB3D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3226FA8A-DED0-490E-94D5-43140CA658AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3226FA8A-DED0-490E-94D5-43140CA658AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3226FA8A-DED0-490E-94D5-43140CA658AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3226FA8A-DED0-490E-94D5-43140CA658AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C5E08B9-6516-418C-8F7B-AEEBE1DAE68F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C5E08B9-6516-418C-8F7B-AEEBE1DAE68F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C5E08B9-6516-418C-8F7B-AEEBE1DAE68F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C5E08B9-6516-418C-8F7B-AEEBE1DAE68F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
