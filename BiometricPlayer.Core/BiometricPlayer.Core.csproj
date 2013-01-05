@@ -73,7 +73,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AntChannel.cs" />
     <Compile Include="AntDevice.cs" />
+    <Compile Include="AntMessage.cs" />
+    <Compile Include="IAntChannel.cs" />
     <Compile Include="IAntDevice.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

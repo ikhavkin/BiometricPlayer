@@ -143,6 +143,31 @@ namespace BiometricPlayer.Tests.Integration
             act.ShouldThrow<InvalidOperationException>();
     }
 
+    public class When_channel_is_requested_on_uninitialized_device : DeviceSpec
+    {
+        static AntChannel channel;
+
+        Because of = () => act = () =>
+            channel = device.Channel;
+
+        It should_throw_invalid_operation_exception = () =>
+            act.ShouldThrow<InvalidOperationException>();
+    }
+
+    public class When_channel_is_requested_on_initialized_device : DeviceSpec
+    {
+        static AntChannel channel;
+
+        Establish context = () =>
+            device.Init();
+
+        Because of = () =>
+            channel = device.Channel;
+
+        It should_return_channel = () =>
+            channel.Should().NotBeNull();
+    }
+
     public class DeviceSpec
     {
         protected static AntDevice device;

@@ -4,6 +4,9 @@ using ANT_Managed_Library;
 
 namespace BiometricPlayer.Core
 {
+    /// <summary>
+    /// ANT device.
+    /// </summary>
     public class AntDevice : IAntDevice
     {
         readonly object locker = new object();
@@ -11,7 +14,11 @@ namespace BiometricPlayer.Core
         bool isDisposed = false;
         byte[] networkKey;
         readonly byte[] defaultNetworkKey = new byte[8];
+        AntChannel channel;
 
+        /// <summary>
+        /// Initialize device using configured parameters.
+        /// </summary>
         public void Init()
         {
             lock (locker)
@@ -22,9 +29,14 @@ namespace BiometricPlayer.Core
                 device = new ANT_Device();
                 // todo scope: support more than one network at a time
                 device.setNetworkKey(0, NetworkKey);
+
+                channel = new AntChannel(device.getChannel(0));
             }
         }
 
+        /// <summary>
+        /// Reset device.
+        /// </summary>
         public void Reset()
         {
             lock (locker)
@@ -64,6 +76,23 @@ namespace BiometricPlayer.Core
                     }
 
                     networkKey = value.ToArray();
+                }
+            }
+        }
+
+        /// <summary>
+        /// ANT channel.
+        /// </summary>
+        // todo scope: support more than only one channel
+        public AntChannel Channel
+        {
+            get
+            {
+                lock (locker)
+                {
+                    CheckInitialized();
+
+                    return channel;
                 }
             }
         }
