@@ -120,6 +120,16 @@ namespace BiometricPlayer.Tests.Integration
         static byte[] key;
     }
 
+    public class When_network_key_with_length_other_than_8_is_set : DeviceSpec
+    {
+        Because of = () => act = () =>
+            device.NetworkKey = new byte[] { 0x1, 0x2, 0x3 };
+
+        It should_throw_invalid_argument_exception = () =>
+            act.ShouldThrow<ArgumentException>().
+                And.ParamName.Should().Be("value");
+    }
+
     [Subject(typeof(AntDevice))]
     public class When_device_is_initialized_and_its_key_changes : DeviceSpec
     {

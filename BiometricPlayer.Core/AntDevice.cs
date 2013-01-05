@@ -35,6 +35,9 @@ namespace BiometricPlayer.Core
             }
         }
 
+        /// <summary>
+        /// Network key. Has to be 8 bytes length.
+        /// </summary>
         public byte[] NetworkKey
         {
             get 
@@ -53,6 +56,11 @@ namespace BiometricPlayer.Core
                     if (device != null)
                     {
                         throw new InvalidOperationException("Already initialized");
+                    }
+
+                    if (value.Length != 8)
+                    {
+                        throw new ArgumentOutOfRangeException("value");
                     }
 
                     networkKey = value.ToArray();
