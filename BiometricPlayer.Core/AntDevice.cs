@@ -5,19 +5,26 @@ namespace BiometricPlayer.Core
 {
     public class AntDevice : IAntDevice
     {
+        private readonly object locker = new object();
         private ANT_Device device;
         private bool isDisposed = false;
 
         public void Init()
         {
-            device = new ANT_Device();
+            lock (locker)
+            {
+                device = new ANT_Device(/*ANT_ReferenceLibrary.PortType.USB, 0, 57600, ANT_ReferenceLibrary.FramerType.basicANT*/);
+            }
         }
 
         public void Reset()
         {
-            if (device == null)
+            lock (locker)
             {
-                throw new InvalidOperationException("Device is not initialized.");
+                if (device == null)
+                {
+                    throw new InvalidOperationException("Device is not initialized.");
+                }
             }
         }
 
@@ -28,12 +35,32 @@ namespace BiometricPlayer.Core
         /// </summary>
         public void Dispose()
         {
-            if (isDisposed)
+            lock (locker)
             {
-                throw new ObjectDisposedException(typeof(AntDevice).FullName);
-            }
+                if (isDisposed)
+                {
+                    throw new ObjectDisposedException(typeof (AntDevice).FullName);
+                }
 
-            isDisposed = true;
+                if (device != null)
+                {
+                    device.Dispose();
+                }
+
+                isDisposed = true;
+                GC.SuppressFinalize(this);
+            }
+        }
+
+        ~AntDevice()
+        {
+            lock (locker)
+            {
+                if (!isDisposed)
+                {
+                    Dispose();
+                }
+            }
         }
     }
 }
