@@ -6,70 +6,39 @@ using Machine.Specifications;
 namespace BiometricPlayer.Tests.Integration
 {
     [Subject(typeof(AntDevice))]
-    public class When_device_is_reset
+    public class When_device_is_reset : DeviceSpec
     {
-        static IAntDevice device;
-
-        Establish context =
-            () =>
-                {
-                    device = new AntDevice();
-                    device.Init();
-                };
+        Establish context = () => 
+            device.Init();
 
         Because of = () => device.Reset();
         
         It should_not_throw = () => { };
-
-        Cleanup all = () =>
-            device.Dispose();
     }
 
     [Subject(typeof(AntDevice))]
-    public class When_device_is_reset_without_init
+    public class When_device_is_reset_without_init : DeviceSpec
     {
-        static IAntDevice device;
-        static Action act;
-
-        Establish context = () =>
-            device = new AntDevice();
-
         Because of = () => act = () =>
             device.Reset();
 
         It should_throw_invalid_operation_exception = () => 
             act.ShouldThrow<InvalidOperationException>();
-
-        Cleanup all = () =>
-            device.Dispose();
     }
 
 
     [Subject(typeof(AntDevice))]
-    public class When_device_is_disposed
+    public class When_device_is_disposed : DeviceSpec
     {
-        static AntDevice device;
-
-        Establish context = () =>
-            device = new AntDevice();
-
-        Because of = () => device.Dispose();
+        Because of = () =>
+            device.Dispose();
 
         It should_not_throw = () => { };
-
-        Cleanup all = () =>
-            device.Dispose();
     }    
     
     [Subject(typeof(AntDevice))]
-    public class When_device_is_disposed_twice
+    public class When_device_is_disposed_twice : DeviceSpec
     {
-        static IAntDevice device;
-        static Action act;
-
-        Establish context = () =>
-            device = new AntDevice();
-
         Because of = () => act = () =>
             {
                 device.Dispose();
@@ -79,23 +48,13 @@ namespace BiometricPlayer.Tests.Integration
         It should_throw_object_disposed_exception = () => 
             act.ShouldThrow<ObjectDisposedException>().
             WithMessage("AntDevice", ComparisonMode.Substring);
-
-        Cleanup all = () =>
-            device.Dispose();
     }
 
     [Subject(typeof(AntDevice))]
-    public class When_device_is_initialized
+    public class When_device_is_initialized : DeviceSpec
     {
-        static AntDevice device;
-
         Establish context = () =>
-            {
-                device = new AntDevice
-                             {
-                                 NetworkKey = new byte[] {0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8}
-                             };
-            };
+            device.NetworkKey = new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8 };
 
         Because of = () =>
             device.Init();
@@ -103,6 +62,15 @@ namespace BiometricPlayer.Tests.Integration
         It should_not_throw = () => { };
         It should_have_network_key_set = () =>
             device.NetworkKey.Should().Equal(new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8 });
+    }
+
+    public class DeviceSpec
+    {
+        protected static AntDevice device;
+        protected static Action act;
+
+        Establish context = () =>
+            device = new AntDevice();
 
         Cleanup all = () =>
             device.Dispose();

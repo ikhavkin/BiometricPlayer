@@ -13,7 +13,8 @@ namespace BiometricPlayer.Core
         {
             lock (locker)
             {
-                device = new ANT_Device(/*ANT_ReferenceLibrary.PortType.USB, 0, 57600, ANT_ReferenceLibrary.FramerType.basicANT*/);
+                // alternative default: ANT_ReferenceLibrary.PortType.USB, 0, 57600, ANT_ReferenceLibrary.FramerType.basicANT
+                device = new ANT_Device();
             }
         }
 
