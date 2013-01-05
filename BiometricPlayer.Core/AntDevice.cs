@@ -1,18 +1,27 @@
 ﻿using System;
+using ANT_Managed_Library;
 
 namespace BiometricPlayer.Core
 {
     public class AntDevice : IAntDevice
     {
         private bool isDisposed = false;
+        private ANT_Device device;
 
         public void Init()
         {
+            device = new ANT_Device();
         }
 
         public void Reset()
         {
+            if (device == null)
+            {
+                throw new InvalidOperationException("Device is not initialized.");
+            }
         }
+
+        public byte[] NetworkKey { get; set; }
 
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.

@@ -6,5 +6,6 @@ namespace BiometricPlayer.Core
     {
         void Init();
         void Reset();
+        byte[] NetworkKey { get; set; }
     }
 }
