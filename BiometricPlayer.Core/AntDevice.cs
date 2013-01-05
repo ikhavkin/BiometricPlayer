@@ -5,8 +5,8 @@ namespace BiometricPlayer.Core
 {
     public class AntDevice : IAntDevice
     {
-        private bool isDisposed = false;
         private ANT_Device device;
+        private bool isDisposed = false;
 
         public void Init()
         {

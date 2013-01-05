@@ -20,6 +20,9 @@ namespace BiometricPlayer.Tests.Integration
         Because of = () => device.Reset();
         
         It should_not_throw = () => { };
+
+        Cleanup all = () =>
+            device.Dispose();
     }
 
     [Subject(typeof(AntDevice))]
@@ -36,6 +39,9 @@ namespace BiometricPlayer.Tests.Integration
 
         It should_throw_invalid_operation_exception = () => 
             act.ShouldThrow<InvalidOperationException>();
+
+        Cleanup all = () =>
+            device.Dispose();
     }
 
 
@@ -50,6 +56,9 @@ namespace BiometricPlayer.Tests.Integration
         Because of = () => device.Dispose();
 
         It should_not_throw = () => { };
+
+        Cleanup all = () =>
+            device.Dispose();
     }    
     
     [Subject(typeof(AntDevice))]
@@ -70,6 +79,9 @@ namespace BiometricPlayer.Tests.Integration
         It should_throw_object_disposed_exception = () => 
             act.ShouldThrow<ObjectDisposedException>().
             WithMessage("AntDevice", ComparisonMode.Substring);
+
+        Cleanup all = () =>
+            device.Dispose();
     }
 
     [Subject(typeof(AntDevice))]
@@ -86,10 +98,14 @@ namespace BiometricPlayer.Tests.Integration
                 device.Init();
             };
 
-        Because of = () => device.Init();
+        Because of = () =>
+            device.Init();
 
         It should_not_throw = () => { };
         It should_have_network_key_set = () =>
             device.NetworkKey.Should().Equal(new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8 });
+
+        Cleanup all = () =>
+            device.Dispose();
     }
 }
