@@ -18,4 +18,5 @@
   <ProxyProcessPath></ProxyProcessPath>
   <UseCPUArchitecture>x86</UseCPUArchitecture>
   <AdditionalFilesToInclude>..\External\**.*</AdditionalFilesToInclude>
+  <HiddenWarnings>AbnormalReferenceResolution</HiddenWarnings>
 </ProjectConfiguration>

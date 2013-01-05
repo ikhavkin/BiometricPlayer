@@ -88,6 +88,39 @@ namespace BiometricPlayer.Tests.Integration
     }
 
     [Subject(typeof(AntDevice))]
+    public class When_set_network_key_and_modify_it : DeviceSpec
+    {
+        Establish context = () =>
+            {
+                key = new byte[] {0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8};
+                device.NetworkKey = key;
+            };
+
+        Because of = () =>
+            key[2] = 0xff;
+
+        It should_have_original_key = () =>
+            device.NetworkKey.Should().Equal(new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8 });
+
+        static byte[] key;
+    }
+
+    [Subject(typeof(AntDevice))]
+    public class When_network_key_is_retrieved_and_modified : DeviceSpec
+    {
+        Establish context = () =>
+            device.NetworkKey = new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8 };
+
+        Because of = () =>
+            device.NetworkKey[2] = 0xff;
+
+        It should_have_original_key = () =>
+            device.NetworkKey.Should().Equal(new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8 });
+
+        static byte[] key;
+    }
+
+    [Subject(typeof(AntDevice))]
     public class When_device_is_initialized_and_its_key_changes : DeviceSpec
     {
         Establish context = () =>

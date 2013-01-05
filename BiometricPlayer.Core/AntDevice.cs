@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using ANT_Managed_Library;
 
 namespace BiometricPlayer.Core
@@ -40,7 +41,7 @@ namespace BiometricPlayer.Core
             {
                 lock (locker)
                 {
-                    return networkKey ?? defaultNetworkKey;
+                    return (networkKey ?? defaultNetworkKey).ToArray();
                 }
             }
             set
@@ -54,7 +55,7 @@ namespace BiometricPlayer.Core
                         throw new InvalidOperationException("Already initialized");
                     }
 
-                    networkKey = value;
+                    networkKey = value.ToArray();
                 }
             }
         }
