@@ -26,7 +26,6 @@ namespace BiometricPlayer.Tests.Integration
             act.ShouldThrow<InvalidOperationException>();
     }
 
-
     [Subject(typeof(AntDevice))]
     public class When_device_is_disposed : DeviceSpec
     {
@@ -51,7 +50,31 @@ namespace BiometricPlayer.Tests.Integration
     }
 
     [Subject(typeof(AntDevice))]
+    public class When_disposed_device_is_initialized : DeviceSpec
+    {
+        Establish context = () =>
+            device.Dispose();
+
+        Because of = () => act = () =>
+            device.Init();
+
+        It should_throw_object_disposed_exception = () => 
+            act.ShouldThrow<ObjectDisposedException>();
+    }
+
+    [Subject(typeof(AntDevice))]
     public class When_device_is_initialized : DeviceSpec
+    {
+        Because of = () =>
+            device.Init();
+
+        It should_not_throw = () => { };
+        It should_have_default_network_key_set = () =>
+            device.NetworkKey.Should().Equal(new byte[] { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 });
+    }
+
+    [Subject(typeof(AntDevice))]
+    public class When_device_is_initialized_with_key : DeviceSpec
     {
         Establish context = () =>
             device.NetworkKey = new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8 };
@@ -60,8 +83,21 @@ namespace BiometricPlayer.Tests.Integration
             device.Init();
 
         It should_not_throw = () => { };
-        It should_have_network_key_set = () =>
+        It should_have_configured_network_key_set = () =>
             device.NetworkKey.Should().Equal(new byte[] { 0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8 });
+    }
+
+    [Subject(typeof(AntDevice))]
+    public class When_device_is_initialized_and_its_key_changes : DeviceSpec
+    {
+        Establish context = () =>
+            device.Init();
+
+        Because of = () => act = () =>
+            device.NetworkKey = new byte[] {0x1, 0x2, 0x3, 0x4, 0x5, 0x6, 0x7, 0x8};
+
+        It should_throw_invalid_operation_exception = () =>
+            act.ShouldThrow<InvalidOperationException>();
     }
 
     public class DeviceSpec

@@ -5,16 +5,22 @@ namespace BiometricPlayer.Core
 {
     public class AntDevice : IAntDevice
     {
-        private readonly object locker = new object();
-        private ANT_Device device;
-        private bool isDisposed = false;
+        readonly object locker = new object();
+        ANT_Device device;
+        bool isDisposed = false;
+        byte[] networkKey;
+        readonly byte[] defaultNetworkKey = new byte[8];
 
         public void Init()
         {
             lock (locker)
             {
+                CheckDisposed();
+
                 // alternative default: ANT_ReferenceLibrary.PortType.USB, 0, 57600, ANT_ReferenceLibrary.FramerType.basicANT
                 device = new ANT_Device();
+                // todo scope: support more than one network at a time
+                device.setNetworkKey(0, NetworkKey);
             }
         }
 
@@ -22,14 +28,36 @@ namespace BiometricPlayer.Core
         {
             lock (locker)
             {
-                if (device == null)
-                {
-                    throw new InvalidOperationException("Device is not initialized.");
-                }
+                CheckInitialized();
+
+                device.ResetSystem();
             }
         }
 
-        public byte[] NetworkKey { get; set; }
+        public byte[] NetworkKey
+        {
+            get 
+            {
+                lock (locker)
+                {
+                    return networkKey ?? defaultNetworkKey;
+                }
+            }
+            set
+            {
+                lock (locker)
+                {
+                    CheckDisposed();
+
+                    if (device != null)
+                    {
+                        throw new InvalidOperationException("Already initialized");
+                    }
+
+                    networkKey = value;
+                }
+            }
+        }
 
         /// <summary>
         /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
@@ -38,10 +66,7 @@ namespace BiometricPlayer.Core
         {
             lock (locker)
             {
-                if (isDisposed)
-                {
-                    throw new ObjectDisposedException(typeof (AntDevice).FullName);
-                }
+                CheckDisposed();
 
                 if (device != null)
                 {
@@ -50,6 +75,24 @@ namespace BiometricPlayer.Core
 
                 isDisposed = true;
                 GC.SuppressFinalize(this);
+            }
+        }
+
+        void CheckInitialized()
+        {
+            CheckDisposed();
+
+            if (device == null)
+            {
+                throw new InvalidOperationException("Device is not initialized.");
+            }
+        }
+
+        void CheckDisposed()
+        {
+            if (isDisposed)
+            {
+                throw new ObjectDisposedException(typeof (AntDevice).FullName);
             }
         }
 
