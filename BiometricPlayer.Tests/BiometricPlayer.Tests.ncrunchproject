@@ -17,6 +17,10 @@
   <UseBuildPlatform></UseBuildPlatform>
   <ProxyProcessPath></ProxyProcessPath>
   <UseCPUArchitecture>x86</UseCPUArchitecture>
+  <IgnoredTests>
+    <RegexTestSelector>
+      <RegularExpression>BiometricPlayer\.Tests\.Integration\.When_configured_device_for_recieving_Garmin_HRM_data\..*</RegularExpression>
+    </RegexTestSelector>
+  </IgnoredTests>
   <AdditionalFilesToInclude>..\External\**.*</AdditionalFilesToInclude>
-  <HiddenWarnings>AbnormalReferenceResolution</HiddenWarnings>
 </ProjectConfiguration>

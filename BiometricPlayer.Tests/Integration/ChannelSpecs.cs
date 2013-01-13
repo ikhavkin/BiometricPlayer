@@ -110,6 +110,8 @@ namespace Namespace
             act.ShouldThrow<InvalidOperationException>();
     }
 
+    // todo: ensure you can't change state of the channel after its device is disposed
+
     public class ChannelSpec : DeviceSpec
     {
         protected static IAntChannel channel;

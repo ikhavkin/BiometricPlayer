@@ -44,9 +44,18 @@ namespace BiometricPlayer.Core
                 channel.setChannelID(DeviceNumber, false, 0, 0);
                 channel.setChannelPeriod(ChannelPeriod);
                 channel.setChannelFreq(ChannelRFFrequency);
+                channel.channelResponse += OnChannelResponseRecieved;
 
                 channel.openChannel();
                 isOpened = true;
+            }
+        }
+
+        void OnChannelResponseRecieved(ANT_Response response)
+        {
+            lock (locker)
+            {
+                messageSubject.OnNext(new AntMessage((byte) response.getMessageID()));
             }
         }
 
@@ -155,6 +164,7 @@ namespace BiometricPlayer.Core
                 CheckDisposed();
 
                 channel.closeChannel();
+                messageSubject.OnCompleted();
 
                 isDisposed = true;
                 GC.SuppressFinalize(this);
