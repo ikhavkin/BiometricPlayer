@@ -120,6 +120,7 @@ namespace BiometricPlayer.Tests.Integration
         static byte[] key;
     }
 
+    [Subject(typeof(AntDevice))]
     public class When_network_key_with_length_other_than_8_is_set : DeviceSpec
     {
         Because of = () => act = () =>
@@ -143,6 +144,7 @@ namespace BiometricPlayer.Tests.Integration
             act.ShouldThrow<InvalidOperationException>();
     }
 
+    [Subject(typeof(AntDevice))]
     public class When_channel_is_requested_on_uninitialized_device : DeviceSpec
     {
         static IAntChannel channel;
@@ -154,6 +156,7 @@ namespace BiometricPlayer.Tests.Integration
             act.ShouldThrow<InvalidOperationException>();
     }
 
+    [Subject(typeof(AntDevice))]
     public class When_channel_is_requested_on_initialized_device : DeviceSpec
     {
         static IAntChannel channel;

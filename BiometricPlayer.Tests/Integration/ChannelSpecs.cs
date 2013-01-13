@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using System.Reactive.Concurrency;
 using BiometricPlayer.Core;
-using BiometricPlayer.Tests.Integration;
 using FakeItEasy;
 using FluentAssertions;
 using Machine.Specifications;
 using System.Reactive.Linq;
 
-namespace Namespace
+namespace BiometricPlayer.Tests.Integration
 {
     [Subject(typeof(AntChannel))]
     public class When_subscribing_to_channel_events : ChannelSpec
@@ -47,6 +46,7 @@ namespace Namespace
             occurredEvents.Should().Equal(testMessage);
     }
 
+    [Subject(typeof(AntChannel))]
     public class When_channel_is_opened_twice : ChannelSpec
     {
         Establish context = () =>
@@ -59,6 +59,7 @@ namespace Namespace
             act.ShouldThrow<InvalidOperationException>();
     }
 
+    [Subject(typeof(AntChannel))]
     public class When_channel_is_fully_configured_and_opened : ChannelSpec
     {
         Establish context = () =>
@@ -74,6 +75,7 @@ namespace Namespace
         It should_not_throw = () => { };
     }
 
+    [Subject(typeof(AntChannel))]
     public class When_frequency_is_set_on_opened_channel : ChannelSpec
     {
         Establish context = () =>
@@ -86,6 +88,7 @@ namespace Namespace
             act.ShouldThrow<InvalidOperationException>();
     }
 
+    [Subject(typeof(AntChannel))]
     public class When_device_num_is_set_on_opened_channel : ChannelSpec
     {
         Establish context = () =>
@@ -98,6 +101,7 @@ namespace Namespace
             act.ShouldThrow<InvalidOperationException>();
     }
 
+    [Subject(typeof(AntChannel))]
     public class When_channel_period_is_set_on_opened_channel : ChannelSpec
     {
         Establish context = () =>
