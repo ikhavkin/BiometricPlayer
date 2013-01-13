@@ -29,13 +29,14 @@ namespace Namespace
     }
 
     [Subject(typeof(AntChannel))]
-    public class When_ANT_channel_event_is_raised : MockedChannelSpec
+    public class When_channel_event_is_raised : MockedChannelSpec
     {
         static IObservable<AntMessage> events;
         static IEnumerable<AntMessage> occurredEvents;
 
         Establish context = () =>
             {
+                channel.Open();
                 events = channel.Events;
             };
 
@@ -44,6 +45,69 @@ namespace Namespace
 
         It should_notify_about_new_message = () =>
             occurredEvents.Should().Equal(testMessage);
+    }
+
+    public class When_channel_is_opened_twice : ChannelSpec
+    {
+        Establish context = () =>
+            channel.Open();
+
+        Because of = () => act = () =>
+            channel.Open();
+
+        It should_throw_invalid_operation_exception = () =>
+            act.ShouldThrow<InvalidOperationException>();
+    }
+
+    public class When_channel_is_fully_configured_and_opened : ChannelSpec
+    {
+        Establish context = () =>
+            {
+                channel.ChannelRFFrequency = 1;
+                channel.DeviceNumber = 2;
+                channel.ChannelPeriod = 3;
+            };
+
+        Because of = () => act = () =>
+            channel.Open();
+
+        It should_not_throw = () => { };
+    }
+
+    public class When_frequency_is_set_on_opened_channel : ChannelSpec
+    {
+        Establish context = () =>
+            channel.Open();
+
+        Because of = () => act = () =>
+            channel.ChannelRFFrequency = 123;
+
+        It should_throw_invalid_operation_exception = () =>
+            act.ShouldThrow<InvalidOperationException>();
+    }
+
+    public class When_device_num_is_set_on_opened_channel : ChannelSpec
+    {
+        Establish context = () =>
+            channel.Open();
+
+        Because of = () => act = () =>
+            channel.DeviceNumber = 123;
+
+        It should_throw_invalid_operation_exception = () =>
+            act.ShouldThrow<InvalidOperationException>();
+    }
+
+    public class When_channel_period_is_set_on_opened_channel : ChannelSpec
+    {
+        Establish context = () =>
+            channel.Open();
+
+        Because of = () => act = () =>
+            channel.ChannelPeriod = 123;
+
+        It should_throw_invalid_operation_exception = () =>
+            act.ShouldThrow<InvalidOperationException>();
     }
 
     public class ChannelSpec : DeviceSpec

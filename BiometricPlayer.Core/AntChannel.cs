@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using ANT_Managed_Library;
 
 namespace BiometricPlayer.Core
@@ -9,7 +9,12 @@ namespace BiometricPlayer.Core
     /// </summary>
     public class AntChannel : IAntChannel
     {
-        ANT_Channel channel;
+        readonly ANT_Channel channel;
+        readonly Subject<AntMessage> messageSubject = new Subject<AntMessage>();
+        bool isOpened = false;
+        byte channelRfFrequency;
+        ushort deviceNumber;
+        ushort channelPeriod;
 
         /// <summary>
         /// Constructs <see cref="AntChannel"/>.
@@ -18,6 +23,70 @@ namespace BiometricPlayer.Core
         internal AntChannel(ANT_Channel channel)
         {
             this.channel = channel;
+
+            // todo: for now assigned to network 0 and channel type BASE_Slave_Receive_0x00 automatically, other hardcoded defaults
+            channel.assignChannel(ANT_ReferenceLibrary.ChannelType.BASE_Slave_Receive_0x00, 0);
+            channel.setChannelSearchTimeout(255);
+        }
+
+        /// <summary>
+        /// Open channel with set configuration parameters.
+        /// </summary>
+        public void Open()
+        {
+            ValidateIsNotOpened();
+
+            channel.setChannelID(DeviceNumber, false, 0, 0);
+            channel.setChannelPeriod(ChannelPeriod);
+            channel.setChannelFreq(ChannelRFFrequency);
+
+            channel.openChannel();
+            isOpened = true;
+        }
+
+        /// <summary>
+        /// Channel radio frequency, see ANT_SetChannelRFFreq.
+        /// </summary>
+        /// <remarks>
+        /// Channel Frequency = 2400 MHz + value * 1.0 MHz 
+        /// </remarks>
+        public byte ChannelRFFrequency
+        {
+            get { return channelRfFrequency; }
+            set
+            {
+                ValidateIsNotOpened();
+                channelRfFrequency = value;
+            }
+        }
+
+        /// <summary>
+        /// Channel messaging period, see ANT_SetChannelPeriod.
+        /// </summary>
+        /// <remarks>
+        /// The channel messaging period in seconds * 32768. Maximum messaging period is ~2 seconds. 
+        /// </remarks>
+        public ushort ChannelPeriod
+        {
+            get { return channelPeriod; }
+            set
+            {
+                ValidateIsNotOpened();
+                channelPeriod = value;
+            }
+        }
+
+        /// <summary>
+        /// Device number to recieve data from, 0 means any device. See ANT_SetChannelId.
+        /// </summary>
+        public ushort DeviceNumber
+        {
+            get { return deviceNumber; }
+            set
+            {   
+                ValidateIsNotOpened();
+                deviceNumber = value;
+            }
         }
 
         /// <summary>
@@ -28,7 +97,15 @@ namespace BiometricPlayer.Core
             get
             {
                 // todo: implement
-                return Observable.Never<AntMessage>();
+                return messageSubject;
+            }
+        }
+
+        void ValidateIsNotOpened()
+        {
+            if (isOpened)
+            {
+                throw new InvalidOperationException("Channel is already opened!");
             }
         }
     }
