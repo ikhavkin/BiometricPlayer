@@ -7,7 +7,7 @@ namespace BiometricPlayer.Core
     /// <summary>
     /// Channel of the <see cref="AntDevice"/>.
     /// </summary>
-    public class AntChannel : IAntChannel
+    public class AntChannel : IAntChannel, IDisposable
     {
         readonly object locker = new object();
         readonly ANT_Channel channel;
@@ -16,6 +16,7 @@ namespace BiometricPlayer.Core
         byte channelRfFrequency;
         ushort deviceNumber;
         ushort channelPeriod;
+        bool isDisposed;
 
         /// <summary>
         /// Constructs <see cref="AntChannel"/>.
@@ -37,7 +38,8 @@ namespace BiometricPlayer.Core
         {
             lock (locker)
             {
-                ValidateIsNotOpened();
+                CheckDisposed();
+                CheckOpened();
 
                 channel.setChannelID(DeviceNumber, false, 0, 0);
                 channel.setChannelPeriod(ChannelPeriod);
@@ -67,7 +69,7 @@ namespace BiometricPlayer.Core
             {
                 lock (locker)
                 {
-                    ValidateIsNotOpened();
+                    CheckOpened();
                     channelRfFrequency = value;
                 }
             }
@@ -92,7 +94,7 @@ namespace BiometricPlayer.Core
             {
                 lock (locker)
                 {
-                    ValidateIsNotOpened();
+                    CheckOpened();
                     channelPeriod = value;
                 }
             }
@@ -114,7 +116,7 @@ namespace BiometricPlayer.Core
             {
                 lock (locker)
                 {
-                    ValidateIsNotOpened();
+                    CheckOpened();
                     deviceNumber = value;
                 }
             }
@@ -135,11 +137,46 @@ namespace BiometricPlayer.Core
             }
         }
 
-        void ValidateIsNotOpened()
+        void CheckOpened()
         {
             if (isOpened)
             {
                 throw new InvalidOperationException("Channel is already opened!");
+            }
+        }
+
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
+        void IDisposable.Dispose()
+        {
+            lock (locker)
+            {
+                CheckDisposed();
+
+                channel.closeChannel();
+
+                isDisposed = true;
+                GC.SuppressFinalize(this);
+            }
+        }
+
+        void CheckDisposed()
+        {
+            if (isDisposed)
+            {
+                throw new ObjectDisposedException(typeof (AntChannel).FullName);
+            }
+        }
+
+        ~AntChannel()
+        {
+            lock (locker)
+            {
+                if (!isDisposed)
+                {
+                    ((IDisposable)this).Dispose();
+                }
             }
         }
     }
