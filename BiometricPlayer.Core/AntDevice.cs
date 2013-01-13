@@ -27,6 +27,9 @@ namespace BiometricPlayer.Core
 
                 // alternative default: ANT_ReferenceLibrary.PortType.USB, 0, 57600, ANT_ReferenceLibrary.FramerType.basicANT
                 device = new ANT_Device();
+                
+                Reset();
+
                 // todo scope: support more than one network at a time
                 device.setNetworkKey(0, NetworkKey);
 
@@ -105,6 +108,12 @@ namespace BiometricPlayer.Core
             lock (locker)
             {
                 CheckDisposed();
+                
+                var channelDisposable = (IDisposable)channel;
+                if (channelDisposable != null)
+                {
+                    channelDisposable.Dispose();    
+                }
 
                 if (device != null)
                 {

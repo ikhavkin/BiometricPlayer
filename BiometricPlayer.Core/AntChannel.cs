@@ -44,9 +44,11 @@ namespace BiometricPlayer.Core
                 channel.setChannelID(DeviceNumber, false, 0, 0);
                 channel.setChannelPeriod(ChannelPeriod);
                 channel.setChannelFreq(ChannelRFFrequency);
+
                 channel.channelResponse += OnChannelResponseRecieved;
 
                 channel.openChannel();
+
                 isOpened = true;
             }
         }
@@ -55,7 +57,7 @@ namespace BiometricPlayer.Core
         {
             lock (locker)
             {
-                messageSubject.OnNext(new AntMessage((byte) response.getMessageID()));
+                messageSubject.OnNext(new AntMessage(response.responseID));
             }
         }
 

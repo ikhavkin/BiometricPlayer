@@ -2,7 +2,6 @@
 using BiometricPlayer.Core;
 using Machine.Specifications;
 using System.Reactive.Linq;
-using System.Reactive.Threading.Tasks;
 
 namespace BiometricPlayer.Tests.Integration
 {
@@ -13,6 +12,7 @@ namespace BiometricPlayer.Tests.Integration
 
         Establish context = () =>
             {
+                device.NetworkKey = new byte[] { 0xb9, 0xa5, 0x21, 0xfb, 0xbd, 0x72, 0xc3, 0x45 };
                 device.Init();
                 channel = device.Channel;
             };
