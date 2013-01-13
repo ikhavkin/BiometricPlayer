@@ -145,7 +145,7 @@ namespace BiometricPlayer.Tests.Integration
 
     public class When_channel_is_requested_on_uninitialized_device : DeviceSpec
     {
-        static AntChannel channel;
+        static IAntChannel channel;
 
         Because of = () => act = () =>
             channel = device.Channel;
@@ -156,7 +156,7 @@ namespace BiometricPlayer.Tests.Integration
 
     public class When_channel_is_requested_on_initialized_device : DeviceSpec
     {
-        static AntChannel channel;
+        static IAntChannel channel;
 
         Establish context = () =>
             device.Init();
@@ -170,7 +170,7 @@ namespace BiometricPlayer.Tests.Integration
 
     public class DeviceSpec
     {
-        protected static AntDevice device;
+        protected static IAntDevice device;
         protected static Action act;
 
         Establish context = () =>
@@ -178,5 +178,5 @@ namespace BiometricPlayer.Tests.Integration
 
         Cleanup all = () =>
             device.Dispose();
-    }
+    }    
 }

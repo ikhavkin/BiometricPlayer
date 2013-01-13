@@ -84,7 +84,7 @@ namespace BiometricPlayer.Core
         /// ANT channel.
         /// </summary>
         // todo scope: support more than only one channel
-        public AntChannel Channel
+        public virtual IAntChannel Channel
         {
             get
             {

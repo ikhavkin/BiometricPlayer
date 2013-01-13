@@ -23,7 +23,7 @@ namespace BiometricPlayer.Core
         /// <summary>
         /// Messages recieved by this channel.
         /// </summary>
-        public IObservable<AntMessage> Events
+        public virtual IObservable<AntMessage> Events
         {
             get
             {
