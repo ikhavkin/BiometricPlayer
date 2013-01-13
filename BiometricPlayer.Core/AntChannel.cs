@@ -9,6 +9,7 @@ namespace BiometricPlayer.Core
     /// </summary>
     public class AntChannel : IAntChannel
     {
+        readonly object locker = new object();
         readonly ANT_Channel channel;
         readonly Subject<AntMessage> messageSubject = new Subject<AntMessage>();
         bool isOpened = false;
@@ -34,14 +35,17 @@ namespace BiometricPlayer.Core
         /// </summary>
         public void Open()
         {
-            ValidateIsNotOpened();
+            lock (locker)
+            {
+                ValidateIsNotOpened();
 
-            channel.setChannelID(DeviceNumber, false, 0, 0);
-            channel.setChannelPeriod(ChannelPeriod);
-            channel.setChannelFreq(ChannelRFFrequency);
+                channel.setChannelID(DeviceNumber, false, 0, 0);
+                channel.setChannelPeriod(ChannelPeriod);
+                channel.setChannelFreq(ChannelRFFrequency);
 
-            channel.openChannel();
-            isOpened = true;
+                channel.openChannel();
+                isOpened = true;
+            }
         }
 
         /// <summary>
@@ -52,11 +56,20 @@ namespace BiometricPlayer.Core
         /// </remarks>
         public byte ChannelRFFrequency
         {
-            get { return channelRfFrequency; }
+            get 
+            {
+                lock (locker)
+                {
+                    return channelRfFrequency;
+                }
+            }
             set
             {
-                ValidateIsNotOpened();
-                channelRfFrequency = value;
+                lock (locker)
+                {
+                    ValidateIsNotOpened();
+                    channelRfFrequency = value;
+                }
             }
         }
 
@@ -68,11 +81,20 @@ namespace BiometricPlayer.Core
         /// </remarks>
         public ushort ChannelPeriod
         {
-            get { return channelPeriod; }
+            get 
+            {
+                lock (locker)
+                {
+                    return channelPeriod;
+                }
+            }
             set
             {
-                ValidateIsNotOpened();
-                channelPeriod = value;
+                lock (locker)
+                {
+                    ValidateIsNotOpened();
+                    channelPeriod = value;
+                }
             }
         }
 
@@ -81,11 +103,20 @@ namespace BiometricPlayer.Core
         /// </summary>
         public ushort DeviceNumber
         {
-            get { return deviceNumber; }
+            get
+            {
+                lock (locker)
+                {
+                    return deviceNumber;
+                }
+            }
             set
-            {   
-                ValidateIsNotOpened();
-                deviceNumber = value;
+            {
+                lock (locker)
+                {
+                    ValidateIsNotOpened();
+                    deviceNumber = value;
+                }
             }
         }
 
@@ -96,8 +127,11 @@ namespace BiometricPlayer.Core
         {
             get
             {
-                // todo: implement
-                return messageSubject;
+                lock (locker)
+                {
+                    // todo: implement
+                    return messageSubject;
+                }
             }
         }
 
