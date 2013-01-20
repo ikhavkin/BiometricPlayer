@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reactive.Concurrency;
 using BiometricPlayer.Core;
 using FakeItEasy;
@@ -44,6 +45,13 @@ namespace BiometricPlayer.Tests.Integration
 
         It should_notify_about_new_message = () =>
             occurredEvents.Should().Equal(testMessage);
+
+        It should_contain_not_empty_data = () =>
+            {
+                var message = occurredEvents.First();
+                message.Data.Should().NotBeNull();
+                message.Data.Should().NotBeEmpty();
+            };
     }
 
     [Subject(typeof(AntChannel))]
@@ -137,7 +145,7 @@ namespace BiometricPlayer.Tests.Integration
         Establish context = () =>
         {
             channel = A.Fake<IAntChannel>();
-            testMessage = new AntMessage(0x01);
+            testMessage = new AntMessage(0x01, new byte[] { 0x10, 0x20, 0x30 });
             A.CallTo(() => channel.Events).Returns(Observable.Return(testMessage));
 
             device = A.Fake<AntDevice>();
