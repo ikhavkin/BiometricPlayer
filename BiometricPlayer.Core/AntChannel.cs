@@ -57,7 +57,7 @@ namespace BiometricPlayer.Core
         {
             lock (locker)
             {
-                messageSubject.OnNext(new AntMessage(response.responseID));
+                messageSubject.OnNext(new AntMessage(response.responseID, response.messageContents));
             }
         }
 
