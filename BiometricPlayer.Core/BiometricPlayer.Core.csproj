@@ -78,6 +78,7 @@
     <Compile Include="AntMessage.cs" />
     <Compile Include="IAntChannel.cs" />
     <Compile Include="IAntDevice.cs" />
+    <Compile Include="SchedulerProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
